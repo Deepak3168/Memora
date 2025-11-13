@@ -1,12 +1,13 @@
 # db.py
 from neontology import init_neontology
 from neontology.graphengines import Neo4jConfig
+from constants import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
 
 # Neo4j configuration
 config = Neo4jConfig(
-    uri="bolt://localhost:7687",
-    username="neo4j",
-    password="Deepak128"
+    uri=NEO4J_URI,
+    username=NEO4J_USERNAME,
+    password=NEO4J_PASSWORD
 )
 
 # Initialize Neo4j driver globally
