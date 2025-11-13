@@ -19,7 +19,7 @@ This project demonstrates how **MCP (Model Context Protocol)** can be used to gi
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/memora-mcp-server.git
+git clone https://github.com/Deepak3168/Memora.git
 cd memora-mcp-server
 ```
 
@@ -63,10 +63,8 @@ sudo apt install neo4j -y
 Use this terminal command:
 
 ```bash
-cypher-shell -u neo4j -p neo4j "ALTER CURRENT USER SET PASSWORD FROM 'neo4j' TO 'Deepak128';"
+cypher-shell -u neo4j -p neo4j "ALTER CURRENT USER SET PASSWORD FROM 'neo4j' TO 'password';"
 ```
-
-> 💡 Replace `Deepak128` with your own secure password.
 
 ### 3. Start and enable service
 
@@ -137,11 +135,12 @@ Claude will then begin creating **entities** (representing your interests, skill
 │   ├── entity_ops.py            # Entity creation & listing routes
 │   └── relation_ops.py          # Relationship endpoints
 ├── models/
-│   └── entity_node.py           # EntityNode definition
+│   └── entity.py           # EntityNode definition
+|   └── relation.py           # RelationEdge definition
 ├── db/
 │   └── init.py                  # Neo4j connection setup
 ├── constants.py                 # Env and configuration constants
-├── claude_desktop_config.json   # MCP config for Claude
+├── mcp_config.json   # MCP config for Claude
 └── requirements.txt
 ```
 
