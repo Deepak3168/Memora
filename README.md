@@ -129,7 +129,7 @@ Claude will then begin creating **entities** (representing your interests, skill
 ## 🧱 Project Structure
 
 ```
-📦 memora-mcp-server
+📦 Memora
 ├── main.py                      # FastAPI entry point
 ├── routes/
 │   ├── entity_ops.py            # Entity creation & listing routes
