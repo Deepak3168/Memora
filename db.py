@@ -1,23 +1,18 @@
 # db.py
 from neontology import init_neontology
 from neontology.graphengines import Neo4jConfig
-from constants import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
+from constants import constants
 
-# Neo4j configuration
 config = Neo4jConfig(
-    uri=NEO4J_URI,
-    username=NEO4J_USERNAME,
-    password=NEO4J_PASSWORD
+    uri=constants.NEO4J_URI,
+    username=constants.NEO4J_USERNAME,
+    password=constants.NEO4J_PASSWORD
 )
 
-# Initialize Neo4j driver globally
-init_neontology(config)
-print("✅ Neo4j initialized with neontology")
 
 def init_db():
-    """Dummy function for FastAPI startup hook"""
+    init_neontology(config)
     print("✅ DB initialization hook called")
 
 def close_db():
-    """Dummy function for FastAPI shutdown hook"""
     print("🛑 DB shutdown hook called")
