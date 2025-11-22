@@ -4,6 +4,7 @@ from datetime import datetime
 from models.user import User  
 from auth.password import hash_password
 from schemas.users import SignupSchema
+import uuid 
 
 
 def create_user(data: SignupSchema):
@@ -12,8 +13,8 @@ def create_user(data: SignupSchema):
     if existing:
         raise ValueError("User already exists")
 
-    user = User(
-        id=data.email,                      # or uuid4()
+    user = User(     
+        id=str(uuid.uuid4()),            
         username=data.username,
         email=data.email,
         hashed_password=hash_password(data.password),

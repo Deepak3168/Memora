@@ -11,8 +11,9 @@ config = Neo4jConfig(
 
 
 def init_db():
-    init_neontology(config)
+    db = init_neontology(config)
     print("✅ DB initialization hook called")
+    return db
 
 def close_db():
     print("🛑 DB shutdown hook called")

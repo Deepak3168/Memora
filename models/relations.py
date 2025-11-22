@@ -1,14 +1,28 @@
 from typing import ClassVar
 from datetime import datetime
 from .entity import EntityNode
+from .category import CategoryNode
 from neontology import BaseRelationship
+from .user import User
+from .api_key import APIKey
+from typing import Union
+
+
+class HAS_CATEGORY(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = "HAS_CATEGORY"
+
+    source: User
+    target: CategoryNode 
+    created_at: datetime = datetime.utcnow()
+    last_updated: datetime = datetime.utcnow()
+
 
 
 class BaseRelation(BaseRelationship):
-    __relationshiptype__: ClassVar[str] = "RELATION"
+    __relationshiptype__: ClassVar[str] = "Relation"
 
-    source: EntityNode
-    target: EntityNode
+    source: Union[EntityNode, CategoryNode]
+    target:  Union[EntityNode, CategoryNode]
     created_at: datetime = datetime.utcnow()
     last_updated: datetime = datetime.utcnow()
 
@@ -16,11 +30,6 @@ class BaseRelation(BaseRelationship):
 # ---------------------------------------------------
 # A. STRUCTURAL RELATIONS
 # ---------------------------------------------------
-
-class HAS_CATEGORY(BaseRelation):
-    __relationshiptype__ = "HAS_CATEGORY"
-
-
 class BELONGS_TO(BaseRelation):
     __relationshiptype__ = "BELONGS_TO"
 
@@ -71,3 +80,14 @@ class LEARNED(BaseRelation):
 
 class INTERESTED_IN(BaseRelation):
     __relationshiptype__ = "INTERESTED_IN"
+
+
+
+class GENERATED_FOR(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = "GENERATED_FOR"
+
+    source: APIKey
+    target: User
+    created_at: datetime = datetime.utcnow()
+    last_updated: datetime = datetime.utcnow()
+

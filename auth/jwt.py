@@ -24,6 +24,10 @@ def create_access_token(data: dict):
     return jwt.encode(to_encode, SECRET, algorithm=ALGO)
 
 
+
+
+
+
 def issue_token(sub: str) -> str:
     token = create_access_token({"sub": sub})
     return token
@@ -51,3 +55,4 @@ def verify_token(token: str):
             return None
 
     return payload
+
