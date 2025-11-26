@@ -117,10 +117,6 @@ def generate_api_key(
 
 
     relation.merge()
-    
-    executor.submit(create_and_connect_categories, user)
-
-
     # Return the hash to the client
     return {
         "api_key": hashed_key,  # this is what client will use

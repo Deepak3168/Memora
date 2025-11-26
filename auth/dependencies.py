@@ -43,43 +43,38 @@ def get_current_user(authorization: str = Header(None)):
 #   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZWVwYWtAZXhhbXBsZS5jb20iLCJleHAiOjE3NjM1NDgwNDksImlhdCI6MTc2MzU0NjI0OX0.C_lXmD3FNaVq4B8TmBHtrHeXPAgoT7lykoqUfYYHQjw"
 
 
-def user_by_token(authorization: str = Header(None)):
-    if not authorization:
-        raise HTTPException(status_code=401, detail="Missing token")
-    key = authorization.replace("Bearer ", "")
+def user_by_token(secret: str = Header(None, alias="API_KEY")):
+    if not secret:
+        raise HTTPException(status_code=401, detail="Missing API_KEY header")
 
+    key = secret  
 
-    if key is None :
-        HTTPException(status_code=401, detail="API key not found")
+    api_key_obj = APIKey.match(key)
+    if not api_key_obj:
+        raise HTTPException(status_code=401, detail="Invalid API key")
 
-    api_key = APIKey.match(key)
+    # expiration validation
+    if datetime.utcnow() > api_key_obj.expires_at:
+        raise HTTPException(status_code=401, detail="API key expired")
 
-    logging.info(f"api_key:{api_key}")
-
-    if not api_key :
-        HTTPException(status_code=401, detail="Invalid token")
-
-    if datetime.utcnow() > api_key.expires_at :
-        return HTTPException(status_code=401, detail="Invalid token")
-    
-
+    # ---- Fetch user through GENERATED_FOR relation ----
     gc = GraphConnection()
 
     cypher_query = f"""
-    MATCH (api:APIKey {{api_key: '{api_key}'}})-[:GENERATED_FOR]->(u:User)
-    RETURN COLLECT({{user_id: u.id}}) AS users
+        MATCH (api:APIKey {{api_key: '{key}'}})-[:GENERATED_FOR]->(u:User)
+        RETURN COLLECT({{user_id: u.id}}) AS users
     """
 
     result = gc.evaluate_query_single(cypher_query)
 
+    if not result or not result[0]["user_id"]:
+        raise HTTPException(status_code=401, detail="User not found for token")
 
-    users = result
-    user_id = users[0]["user_id"] if users else None
+    user_id = result[0]["user_id"]
 
-    logging.info("result",result)
-    
+    # Neo4j-OGM lookup
     user = User.match(user_id)
-
-    logging.info("user",user.username)
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
 
     return user

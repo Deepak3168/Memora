@@ -1,7 +1,7 @@
 from typing import ClassVar, List, Optional
 from datetime import datetime
 from neontology import  BaseNode
- 
+import uuid
 
 
 
@@ -10,7 +10,7 @@ class CategoryNode(BaseNode):
     __primaryproperty__: ClassVar[str] = "id"
 
 
-    id: str
+    id: str = str(uuid.uuid4())
     name: str
     description: Optional[str] = None
     tags: Optional[List[str]] = None
