@@ -13,11 +13,15 @@ category_router = APIRouter(prefix="/category",tags=["Category"])
 
 @category_router.post(
     path="/",
-    summary="Create a new category and link it to the user",
+    summary="Create a new Category and associate it with the user",
     description=(
-        "Creates a category and connects it to the authenticated user. "
-        "The request body uses the CategoryCreate model, which allows all fields "
-        "to be read and validated at once for efficient processing."
+        "Create a new Category with a unique ID, name, and optional fields such as "
+        "description, tags, and remarks. "
+        "The new Category will be automatically linked to the authenticated user. "
+        "The request body should follow the `CategoryCreate` model, which ensures all "
+        "fields are validated and processed efficiently. "
+        "This endpoint is designed to prevent clients from manually specifying the ID, "
+        "ensuring it is always generated server-side."
     ),
 )
 def create_category(data: CategoryCreate,user:User =Depends(user_by_token)):
@@ -29,10 +33,13 @@ def create_category(data: CategoryCreate,user:User =Depends(user_by_token)):
     return {"message":"Category Created"}
 
 @category_router.get(
-    path = "/list",
-    summary = "List all the available Categories of User",
-    description= (
-        "The API endpoint returns all the Categories Names related to User"
+    path="/list",
+    summary="Retrieve all Categories associated with the authenticated user",
+    description=(
+        "Fetch a list of all Categories that belong to the authenticated user. "
+        "Each Category in the response includes its ID and name. "
+        "This allows the client to view all available Categories for selection, "
+        "navigation, or further processing within the system."
     )
 )
 def get_categories(user:User = Depends(user_by_token)):

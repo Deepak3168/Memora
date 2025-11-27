@@ -16,8 +16,15 @@ entity_router = APIRouter(
 
 @entity_router.post(
     path="/",
-    summary="Create a new Entity and relate it to a Category or another Entity",
-    description="Creates an Entity and optionally links it to a Category or another Entity."
+    summary="Create an Entity with optional relationships, including custom ones",
+    description=(
+        "Create a new Entity with a unique ID and name. "
+        "Optionally, you can relate this Entity to an existing Category or another Entity. "
+        "If the exact Category does not exist, you can create a custom relationship by providing "
+        "`type` (the relationship type), `strength` (numeric value indicating importance), "
+        "and `remarks` (optional notes about the relationship). "
+        "All relationships will be automatically created in the graph."
+    )
 )
 def create_entity(
     data: EntityCreate,
@@ -143,9 +150,19 @@ def create_entity(
 
 
 
-@entity_router.get(path="/list",
-                   summary="Returns Sub Graph Rleated to Category by Category ID",
-                   description=("Returns Sub Graph which contains entities , relationships by Category ID "))
+@entity_router.get(
+    path="/list",
+    summary="Fetch a subgraph of entities and relationships for a given Category",
+    description=(
+        "Retrieve a subgraph containing all entities and their relationships that are "
+        "connected to a specific Category, identified by its ID. "
+        "The response includes: "
+        "1. Category details (ID and name), "
+        "2. All related entities (ID and name), "
+        "3. All relationships between these entities (source ID and target ID). "
+        "This allows you to explore the structure and connections of a Category in the graph."
+    )
+)
 def get_sub_graph_by_category_id(category_id:str | None = Query(None,description="Category ID"),user:User = Depends(user_by_token)):
     if category_id is None:
         return HTTPException(status_code=400,detail="Category ID is Required")
@@ -186,7 +203,17 @@ def get_sub_graph_by_category_id(category_id:str | None = Query(None,description
     return records
 
 
-@entity_router.get("/list/all", summary="Returns all entities")
+@entity_router.get(
+    path="/list/all",
+    summary="Fetch all entities with pagination",
+    description=(
+        "Retrieve a list of all entities in the system. "
+        "Each entity includes its ID and name. "
+        "The results are paginated, with a default page size of 25. "
+        "You can specify the page number using the `page` query parameter. "
+        "The response also includes `next` and `prev` links to navigate through pages easily."
+    )
+)
 def get_all_entities(
     page: int = Query(1, description="Page number, default is 1"),
     user: User = Depends(user_by_token)

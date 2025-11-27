@@ -10,11 +10,16 @@ from models.relations import BaseRelation
 relation_router  = APIRouter(prefix="/relation",tags=["Relation"])
 
 
-@relation_router.get(path="/list",
-                     summary="Return List of Relations Available",
-                     description=(
-                         "Return list of Class Names of All available Relations"
-                     ))
+@relation_router.get(
+    path="/list",
+    summary="Retrieve all available relation types",
+    description=(
+        "Fetch a list of all relation types currently defined in the system. "
+        "Each item in the response includes the class name of the relation. "
+        "This endpoint helps clients understand what types of relationships can be created "
+        "between entities or categories."
+    )
+)
 def get_relations(user:User=Depends(user_by_token)):
     return [
         "BELONGS TO",
@@ -33,8 +38,14 @@ def get_relations(user:User=Depends(user_by_token)):
 
 @relation_router.post(
     path="/",
-    summary="Create a Relation Edge between nodes",
-    description="Creates either a built-in or custom relation."
+    summary="Create a relation edge between entities or categories",
+    description=(
+        "Create a new relationship (edge) between two nodes in the graph, which can be "
+        "either a built-in relation type or a custom relation. "
+        "For custom relations, you can provide `type` (relation name), `strength` (numeric importance), "
+        "and `remarks` (optional notes). "
+        "This endpoint ensures that the relationship is properly created and stored in the graph."
+    )
 )
 def create_relation(
     data: RelationCreate | None = Body(None),
