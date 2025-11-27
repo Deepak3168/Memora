@@ -1,13 +1,14 @@
-from typing import ClassVar, Optional
+from typing import ClassVar, Optional,Union
 from datetime import datetime
 from .entity import EntityNode
+from .category import CategoryNode
 from neontology import  BaseRelationship
 
 class RelationEdge(BaseRelationship):
     __relationshiptype__: ClassVar[str] = "RELATION"
 
-    source: EntityNode
-    target: EntityNode
+    source: Union[EntityNode, CategoryNode]
+    target: Union[EntityNode, CategoryNode]
     type: str
     strength: float = 0.5
     remarks: Optional[str] = None

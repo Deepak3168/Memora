@@ -5,6 +5,8 @@ from auth.dependencies import user_by_token
 from schemas.relation import CategoryCreate
 from models.user import User 
 from models.relations import HAS_CATEGORY
+from neontology import GraphConnection
+
 category_router = APIRouter(prefix="/category",tags=["Category"])
 
 
@@ -25,3 +27,26 @@ def create_category(data: CategoryCreate,user:User =Depends(user_by_token)):
     related.merge()
 
     return {"message":"Category Created"}
+
+@category_router.get(
+    path = "/list",
+    summary = "List all the available Categories of User",
+    description= (
+        "The API endpoint returns all the Categories Names related to User"
+    )
+)
+def get_categories(user:User = Depends(user_by_token)):
+    gc = GraphConnection()
+
+    user_id = user.id 
+
+    cypher_query = f"""
+        MATCH (u:User {{id: '{user_id}'}})-[:HAS_CATEGORY]->(c:Category)
+        RETURN COLLECT({{name: c.name, id: c.id}}) AS category_list;
+        """
+    result = gc.evaluate_query_single(cypher_query)
+    return result
+
+
+
+# 7347328438

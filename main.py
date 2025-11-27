@@ -7,6 +7,8 @@ from mcp_tools.category_ops import category_router
 import uvicorn
 from fastapi_mcp import FastApiMCP
 import logging
+from mcp_tools.entity_ops import entity_router
+from mcp_tools.relation_ops import relation_router
 
 # -----------------------------
 # Your REST API lifespan
@@ -42,6 +44,8 @@ app = FastAPI(
 app.include_router(auth_router)
 app.include_router(greet_router)
 app.include_router(category_router)
+app.include_router(entity_router)
+app.include_router(relation_router)
 
 
 

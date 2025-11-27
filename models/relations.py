@@ -27,6 +27,14 @@ class BaseRelation(BaseRelationship):
     last_updated: datetime = datetime.utcnow()
 
 
+    @classmethod
+    def get_subclass(cls, relation_type: str):
+        for subclass in cls.__subclasses__():
+            if getattr(subclass, "__relationshiptype__", None) == relation_type:
+                return subclass
+        raise ValueError(f"No relation found for type '{relation_type}'")
+
+
 # ---------------------------------------------------
 # A. STRUCTURAL RELATIONS
 # ---------------------------------------------------
