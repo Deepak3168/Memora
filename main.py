@@ -9,6 +9,8 @@ from fastapi_mcp import FastApiMCP
 import logging
 from mcp_tools.entity_ops import entity_router
 from mcp_tools.relation_ops import relation_router
+from fastapi.responses import JSONResponse
+
 
 # -----------------------------
 # Your REST API lifespan
@@ -48,6 +50,12 @@ app.include_router(entity_router)
 app.include_router(relation_router)
 
 
+
+
+@app.get("/openapidoc", summary="Return OpenAPI schema for MCP", description="Returns the full OpenAPI JSON used by the server.")
+async def get_openapi_schema():
+    return JSONResponse(content=app.openapi())
+    
 
 
 # -----------------------------

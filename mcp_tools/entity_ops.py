@@ -7,6 +7,7 @@ from auth.dependencies import user_by_token
 from models.relation import RelationEdge
 from models.relations import *
 from neontology import GraphConnection
+from utils.primary_key import generate_prefixed_uuid
 
 entity_router = APIRouter(
     prefix = '/entity',
@@ -73,7 +74,11 @@ def create_entity(
     # ---------------------------------------------------------
     # 1. Create the Entity
     # ---------------------------------------------------------
-    entity_created = EntityNode(**data.model_dump())
+
+    # name = data.get('name')
+
+    entity_id = generate_prefixed_uuid("ENT")
+    entity_created = EntityNode(**data.model_dump(),id=entity_id)
     entity = entity_created.create()
 
     # Build custom relation dict only if user provided fields

@@ -6,6 +6,8 @@ from schemas.relation import CategoryCreate
 from models.user import User 
 from models.relations import HAS_CATEGORY
 from neontology import GraphConnection
+from utils.primary_key import generate_prefixed_uuid
+
 
 category_router = APIRouter(prefix="/category",tags=["Category"])
 
@@ -25,6 +27,7 @@ category_router = APIRouter(prefix="/category",tags=["Category"])
     ),
 )
 def create_category(data: CategoryCreate,user:User =Depends(user_by_token)):
+    category_id = generate_prefixed_uuid("CAT")
     category_created = CategoryNode(**data.model_dump())
     category = category_created.create()
     related = HAS_CATEGORY(source=user,target=category)

@@ -5,7 +5,7 @@ from utils.primary_key import generate_prefixed_uuid
 
 
 class CategoryCreate(BaseModel):
-    id:str =  Field(default_factory=lambda: generate_prefixed_uuid("CAT"),exclude=True)
+    # id:str =  Field(default_factory=lambda: generate_prefixed_uuid("CAT"),exclude=True)
     name:str
     description:Optional[str]=None
     tags:Optional[List[str]]=None

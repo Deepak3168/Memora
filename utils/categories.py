@@ -1,12 +1,10 @@
 from models.relations  import HAS_CATEGORY
 from models.category import CategoryNode
-import secrets
-
-
 from models.relations import HAS_CATEGORY
 from models.category import CategoryNode
-import secrets
 from datetime import datetime
+from utils.primary_key import generate_prefixed_uuid
+
 
 
 def create_and_connect_categories(user):
@@ -14,7 +12,6 @@ def create_and_connect_categories(user):
     Helper function to create multiple default categories
     and connect them to a user using HAS_CATEGORY relation.
     """
-
     categories_data = [
         {
             "name": "Skills",
@@ -71,7 +68,7 @@ def create_and_connect_categories(user):
     # Create and connect each category
     for c in categories_data:
         node = CategoryNode(
-            id=str(secrets.randbits(64)),
+            id=generate_prefixed_uuid("CAT"),
             name=c["name"],
             description=c["description"],
             tags=c["tags"],
