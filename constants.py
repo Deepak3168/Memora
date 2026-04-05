@@ -17,7 +17,7 @@ class Constants(BaseSettings):
             env_file = ".env"
             from_attributes = True
 
-
+#VIRTUAL ENV PATH = ../env
 
 
 constants = Constants()
